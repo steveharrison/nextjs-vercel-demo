@@ -1,13 +1,25 @@
 import Image from 'next/image'
 import styles from './page.module.css'
+import { sql } from "@vercel/postgres";
 
-export default function Home() {
+export default async function Home({ params }) {
+  const { rows } = await sql`SELECT * from posts`;
+
   return (
     <main className={styles.main}>
       <div className={styles.description}>
         <p>
           Get started by editing like so!&nbsp;
           <code className={styles.code}>app/page.js</code>
+        </p>
+        <p>DB stuff:
+          <div>
+            {rows.map((row) => (
+              <div key={row.id}>
+                {row.id} - {row.text}
+              </div>
+            ))}
+          </div>
         </p>
         <div>
           <a
